@@ -1,24 +1,6 @@
 import type { SessionUsageData } from '@tokentop/plugin-sdk';
 
 /**
- * Cost breakdown Pi computes itself, in USD.
- *
- * Deliberately never forwarded as a row cost. Pi can only price routes it has
- * a rate table for: across 74 real session files, 93% of calls went through
- * gateway providers (`meridian-local`, `anthropic-litellm`, `litellm`) and were
- * recorded as zero. Forwarding that would understate the list-rate value of
- * those tokens roughly 27x. Every request still reaches a real provider, so
- * tokentop prices the tokens itself, as it does for every other agent.
- */
-export interface PiCost {
-  input: number;
-  output: number;
-  cacheRead: number;
-  cacheWrite: number;
-  total: number;
-}
-
-/**
  * Token usage as reported by `@earendil-works/pi-ai`.
  *
  * Two fields are *subsets* of other fields and must never be added on top of
@@ -36,7 +18,6 @@ export interface PiUsage {
   /** Subset of `output`. Only set by providers exposing a reasoning breakdown. */
   reasoning?: number;
   totalTokens: number;
-  cost?: PiCost;
 }
 
 /** The assistant/user message carried by a `message` entry. */

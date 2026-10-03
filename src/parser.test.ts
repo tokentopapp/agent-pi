@@ -322,18 +322,27 @@ describe('parseSessionFile', () => {
     expect(rows[0]?.sessionName).toBeUndefined();
   });
 
-  test('never forwards Pi\'s own cost, which is zero on every gateway-routed call', () => {
-    const rows = parseSessionFile(
-      jsonl(
-        header(),
-        assistant('a1', {}, usage({
+  test('ignores a cost present in the file — pricing belongs to the core', () => {
+    const withCost = JSON.stringify({
+      type: 'message',
+      id: 'a1',
+      timestamp: '2026-01-01T00:01:00.000Z',
+      message: {
+        role: 'assistant',
+        provider: 'anthropic',
+        model: 'claude-sonnet-4-5',
+        timestamp: 1_700_000_000_000,
+        usage: {
+          ...usage(),
           cost: { input: 0.1, output: 0.2, cacheRead: 0, cacheWrite: 0, total: 0.3 },
-        })),
-      ),
-      META,
-      VARIANT,
-    );
+        },
+      },
+    });
 
+    const rows = parseSessionFile(jsonl(header(), withCost), META, VARIANT);
+
+    expect(rows).toHaveLength(1);
+    expect(rows[0]?.tokens.input).toBe(100);
     expect(rows[0]?.cost).toBeUndefined();
   });
 

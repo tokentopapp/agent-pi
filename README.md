@@ -49,20 +49,18 @@ Pi attaches usage to more than just assistant messages, and all of it is billed:
 | `branch_summary` | the branch summarisation call |
 | `child_usage_attributed` | spawned subagent turns |
 
-`child_usage_attributed` matters most. Measured against 74 real session files, of which 57 carry any usage: all 2,347 `childUsage` figures appeared nowhere in the message stream, and accounted for 7.3% of total spend — counting only `message` entries silently loses it. Its sibling `aggregateUsage` field is a running total scoped to the child task, so it is deliberately ignored; summing it double-counts.
+`child_usage_attributed` matters most. Measured against 74 real session files, of which 57 carry any usage: all 2,347 `childUsage` figures appeared nowhere in the message stream, and account for **24% of all tokens** (83.0M of 345.9M) — counting only `message` entries silently loses a quarter of the usage. Its sibling `aggregateUsage` field is a running total scoped to the child task, so it is deliberately ignored; summing it double-counts.
 
 Two usage fields are documented subsets and are never added on top of their parents:
 
 - `reasoning` is already included in `output`
 - `cacheWrite1h` is already included in `cacheWrite`
 
-Costs are deliberately **not** taken from Pi. Pi writes a `usage.cost.total` for every call, but it can only price routes it has a rate table for — across 74 real session files, 93% of calls went through gateway providers (`meridian-local`, `anthropic-litellm`, `litellm`, `meridian`) and were recorded as `0`, understating the list-rate value of those tokens by roughly 27x. Every request still lands at a real provider, so tokentop prices the tokens itself at models.dev rates including the cache read/write tiers, exactly as it does for every other agent.
-
 ## Forked sessions
 
-`/fork`, `/clone` and branch extraction copy a session's history into a new file verbatim — same entry ids, same token counts. Both files then describe the same spend.
+`/fork`, `/clone` and branch extraction copy a session's history into a new file verbatim — same entry ids, same token counts. Both files then describe the same usage.
 
-Rows are de-duplicated by entry id plus token counts, with sessions processed oldest-header-first, so the original session keeps the shared history and only the fork's own turns are added to it. Header creation time is used rather than mtime: appending to a parent later must not hand ownership of its own past spend to the fork.
+Rows are de-duplicated by entry id plus token counts, with sessions processed oldest-header-first, so the original session keeps the shared history and only the fork's own turns are added to it. Header creation time is used rather than mtime: appending to a parent later must not hand ownership of its own past usage to the fork.
 
 ## Providers
 
