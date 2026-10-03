@@ -1,6 +1,6 @@
 {
   "name": "@tokentop/agent-pi",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Pi coding agent session and token tracking for tokentop",
   "type": "module",
   "main": "dist/index.js",
