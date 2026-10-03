@@ -59,6 +59,6 @@
   "devDependencies": {
     "@tokentop/plugin-sdk": "^1.5.0",
     "@types/bun": "latest",
-    "typescript": "^5.7.0"
+    "typescript": "^7.0.0"
   }
 }
