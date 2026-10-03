@@ -49,7 +49,7 @@ Pi attaches usage to more than just assistant messages, and all of it is billed:
 | `branch_summary` | the branch summarisation call |
 | `child_usage_attributed` | spawned subagent turns |
 
-`child_usage_attributed` matters most. Across 74 real sessions its `childUsage` figures appeared nowhere in the message stream and accounted for roughly 7% of total spend — counting only `message` entries silently loses it. Its sibling `aggregateUsage` field is a running total scoped to the child task, so it is deliberately ignored; summing it double-counts.
+`child_usage_attributed` matters most. Measured against 74 real session files, of which 57 carry any usage: all 2,347 `childUsage` figures appeared nowhere in the message stream, and accounted for 7.3% of total spend — counting only `message` entries silently loses it. Its sibling `aggregateUsage` field is a running total scoped to the child task, so it is deliberately ignored; summing it double-counts.
 
 Two usage fields are documented subsets and are never added on top of their parents:
 
@@ -86,7 +86,7 @@ tokentop polls `parseSessions` on a timer, so the plugin avoids re-reading uncha
 - recursive `fs.watch` dirty-path tracking, with a 10-minute reconciliation sweep as a backstop
 - append-only offset tracking for real-time activity, so only newly written bytes are parsed
 
-Measured on 74 sessions / 5,630 usage rows: 144ms cold, 1.4ms warm.
+Measured on 74 session files / 57 sessions with usage / 5,630 usage rows: 144ms cold, 1.4ms warm.
 
 ## API
 
