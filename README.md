@@ -56,7 +56,7 @@ Two usage fields are documented subsets and are never added on top of their pare
 - `reasoning` is already included in `output`
 - `cacheWrite1h` is already included in `cacheWrite`
 
-Pi prices each call itself, so `usage.cost.total` is reported as the row cost where present.
+Costs are deliberately **not** taken from Pi. Pi writes a `usage.cost.total` for every call, but it can only price routes it has a rate table for — across 74 real session files, 93% of calls went through gateway providers (`meridian-local`, `anthropic-litellm`, `litellm`, `meridian`) and were recorded as `0`, understating the list-rate value of those tokens by roughly 27x. Every request still lands at a real provider, so tokentop prices the tokens itself at models.dev rates including the cache read/write tiers, exactly as it does for every other agent.
 
 ## Forked sessions
 

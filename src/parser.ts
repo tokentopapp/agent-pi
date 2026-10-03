@@ -284,9 +284,6 @@ export function parseSessionFile(
     if (sessionName) row.sessionName = sessionName;
     if (projectPath) row.projectPath = projectPath;
 
-    const reportedCost = num(source.usage.cost?.total);
-    if (reportedCost > 0) row.cost = reportedCost;
-
     const key = dedupKey(row);
     if (seen.has(key)) continue;
     seen.add(key);

@@ -322,7 +322,7 @@ describe('parseSessionFile', () => {
     expect(rows[0]?.sessionName).toBeUndefined();
   });
 
-  test('reports the cost Pi computed itself', () => {
+  test('never forwards Pi\'s own cost, which is zero on every gateway-routed call', () => {
     const rows = parseSessionFile(
       jsonl(
         header(),
@@ -334,7 +334,7 @@ describe('parseSessionFile', () => {
       VARIANT,
     );
 
-    expect(rows[0]?.cost).toBeCloseTo(0.3, 10);
+    expect(rows[0]?.cost).toBeUndefined();
   });
 
   test('tags rows with the variant that produced them', () => {
